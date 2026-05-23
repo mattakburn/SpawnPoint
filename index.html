@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SpawnPoint</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+  <style>
+    @font-face {
+  font-family: 'Minecraft';
+  src: url('Minecraft.ttf') format('truetype');
+}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #12100d;
+      color: #f4e7b7;
+      overflow-x: hidden;
+    }
+
+    h1,
+    h2,
+    h3,
+    .logo,
+    .button,
+    .hero-tag,
+    .nav-links a {
+      font-family: 'Minecraft', cursive;
+      line-height: 1.5;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: auto;
+      padding: 0 24px;
+    }
+
+    /* NAVBAR */
+
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      background: rgba(18, 16, 13, 0.85);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid #2f2417;
+    }
+
+    .nav-content {
+      height: 75px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 900;
+      color: #f4e7b7;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: #c9b88d;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: white;
+    }
+
+    .button {
+      padding: 14px 24px;
+      border-radius: 16px;
+      font-weight: 800;
+      transition: 0.25s ease;
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    .primary-button {
+      background: #a58759;
+      color: black;
+    }
+
+    .primary-button:hover {
+      transform: translateY(-2px) scale(1.03);
+    }
+
+    .secondary-button {
+      border: 1px solid #5d4a32;
+      background: #211911;
+      color: #f4e7b7;
+    }
+
+    .secondary-button:hover {
+      background: #302418;
+    }
+
+    /* HERO */
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding-top: 90px;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(165,135,89,0.25) 0%, rgba(165,135,89,0) 70%);
+      top: -150px;
+      right: -150px;
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: #201911;
+      border: 1px solid #5d4a32;
+      margin-bottom: 24px;
+      color: #d5c69b;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .hero h1 {
+      font-size: 82px;
+      line-height: 0.95;
+      font-weight: 900;
+      margin-bottom: 24px;
+    }
+
+    .hero p {
+      color: #cfbe90;
+      font-size: 20px;
+      line-height: 1.7;
+      max-width: 600px;
+    }
+
+    .hero-buttons {
+      margin-top: 40px;
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .stats {
+      margin-top: 50px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      max-width: 520px;
+    }
+
+    .stat-card {
+      background: #1e1710;
+      border: 1px solid #3d2f1e;
+      border-radius: 22px;
+      padding: 22px;
+      text-align: center;
+    }
+
+    .stat-card h3 {
+      font-size: 28px;
+      margin-bottom: 6px;
+    }
+
+    .stat-card p {
+      font-size: 13px;
+      color: #bba97a;
+    }
+
+    .phone-wrapper {
+      display: flex;
+      justify-content: center;
+      position: relative;
+    }
+
+    .phone-glow {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(165,135,89,0.35) 0%, rgba(165,135,89,0) 70%);
+      filter: blur(30px);
+    }
+
+    .phone {
+      width: 320px;
+      border-radius: 42px;
+      background: #211911;
+      border: 1px solid #5d4a32;
+      padding: 12px;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.55);
+      animation: float 5s ease-in-out infinite;
+    }
+
+    .phone img {
+      width: 100%;
+      border-radius: 32px;
+      display: block;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
+      100% { transform: translateY(0px); }
+    }
+
+    /* FEATURES */
+
+    section {
+      padding: 120px 0;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 70px;
+    }
+
+    .section-title h2 {
+      font-size: 52px;
+      margin-bottom: 16px;
+    }
+
+    .section-title p {
+      color: #bca978;
+      font-size: 18px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: #1d1710;
+      border: 1px solid #3d2f1e;
+      border-radius: 28px;
+      padding: 34px;
+      transition: 0.25s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-6px);
+      border-color: #7d6644;
+    }
+
+    .feature-icon {
+      font-size: 42px;
+      margin-bottom: 18px;
+    }
+
+    .feature-card h3 {
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+
+    .feature-card p {
+      color: #c8b789;
+      line-height: 1.7;
+    }
+
+    /* SCREENSHOTS */
+
+    .screenshots {
+      background: #17120d;
+      border-top: 1px solid #2f2417;
+      border-bottom: 1px solid #2f2417;
+    }
+
+    .screenshot-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+
+    .screenshot-card {
+      background: #1e1710;
+      border: 1px solid #3d2f1e;
+      border-radius: 30px;
+      padding: 16px;
+      transition: 0.25s ease;
+    }
+
+    .screenshot-card:hover {
+      transform: translateY(-6px);
+    }
+
+    .screenshot-card img {
+      width: 100%;
+      border-radius: 22px;
+    }
+
+    .screenshot-card h3 {
+      margin-top: 18px;
+      font-size: 22px;
+    }
+
+    /* CTA */
+
+    .cta-box {
+      background: linear-gradient(135deg, #1f1811, #2a1f14);
+      border: 1px solid #4d3d28;
+      border-radius: 40px;
+      padding: 70px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-box::before {
+      content: "";
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(165,135,89,0.25) 0%, rgba(165,135,89,0) 70%);
+      top: -120px;
+      right: -120px;
+    }
+
+    .cta-box h2 {
+      font-size: 56px;
+      margin-bottom: 22px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .cta-box p {
+      color: #d3c392;
+      font-size: 20px;
+      line-height: 1.7;
+      max-width: 760px;
+      margin: auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .cta-buttons {
+      margin-top: 40px;
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* FOOTER */
+
+    footer {
+      padding: 40px 0;
+      border-top: 1px solid #2f2417;
+      text-align: center;
+      color: #9f8f66;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .features-grid,
+      .screenshot-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 130px;
+      }
+
+      .hero h1 {
+        font-size: 58px;
+      }
+
+      .section-title h2,
+      .cta-box h2 {
+        font-size: 40px;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .cta-box {
+        padding: 40px 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="container nav-content">
+      <div class="logo">SpawnPoint</div>
+
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#screenshots">Screenshots</a>
+        <a href="#beta">Beta</a>
+
+        <a href="https://discord.com" class="button secondary-button">
+          Discord
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="container hero-grid">
+
+      <div>
+        <div class="hero-tag">
+          Real-time multiplayer social map app
+        </div>
+
+        <h1>
+          Track.<br>
+          Chat.<br>
+          Explore.
+        </h1>
+
+        <p>
+          SpawnPoint is a Minecraft-inspired social map app where friends can
+          see each other live, message instantly, unlock skins, and explore the
+          world together.
+        </p>
+
+        <div class="hero-buttons">
+          <a href="#screenshots" class="button primary-button">
+            View Screenshots
+          </a>
+
+          <a href="https://discord.com" class="button secondary-button">
+            Join Beta Discord
+          </a>
+        </div>
+
+        <div class="stats">
+          <div class="stat-card">
+            <h3>Live</h3>
+            <p>Friend Tracking</p>
+          </div>
+
+          <div class="stat-card">
+            <h3>Chat</h3>
+            <p>Instant Messaging</p>
+          </div>
+
+          <div class="stat-card">
+            <h3>Skins</h3>
+            <p>Unlock Cosmetics</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="phone-wrapper">
+        <div class="phone-glow"></div>
+
+        <div class="phone">
+          <img src="map.png" alt="SpawnPoint App Screenshot">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="container">
+
+      <div class="section-title">
+        <h2>Features</h2>
+
+        <p>
+          A social experience built like a multiplayer game.
+        </p>
+      </div>
+
+      <div class="features-grid">
+
+        <div class="feature-card">
+          <div class="feature-icon">🗺️</div>
+          <h3>Real-Time Map</h3>
+          <p>
+            See where your friends are live and jump directly to them on the map.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">💬</div>
+          <h3>Built-In Messaging</h3>
+          <p>
+            Chat instantly with your friends without leaving the app.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <h3>Unlockable Skins</h3>
+          <p>
+            Earn gold, collect cosmetics, and customize your player identity.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🚀</div>
+          <h3>Growing Community</h3>
+          <p>
+            SpawnPoint is actively being developed with new features and updates planned.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="screenshots" id="screenshots">
+    <div class="container">
+
+      <div class="section-title">
+        <h2>Screenshots</h2>
+
+        <p>
+          Replace these placeholder images with your real app screenshots.
+        </p>
+      </div>
+
+      <div class="screenshot-grid">
+
+        <div class="screenshot-card">
+          <img src="map.png" alt="Map Screenshot">
+          <h3>Live Map</h3>
+        </div>
+
+        <div class="screenshot-card">
+          <img src="messages.png" alt="Chat Screenshot">
+          <h3>Messages</h3>
+        </div>
+
+        <div class="screenshot-card">
+          <img src="shop.png" alt="Shop Screenshot">
+          <h3>Shop & Skins</h3>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="beta">
+    <div class="container">
+
+      <div class="cta-box">
+        <h2>Join the Beta</h2>
+
+        <p>
+          SpawnPoint is currently in beta testing. Join the community, help test
+          features, report bugs, and shape the future of the app.
+        </p>
+
+        <div class="cta-buttons">
+          <a href="https://discord.com" class="button primary-button">
+            Join Discord
+          </a>
+
+          <a href="https://ko-fi.com" class="button secondary-button">
+            Support Development
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    © 2026 SpawnPoint — All rights reserved.
+  </footer>
+
+  <script>
+    // SIMPLE FADE-IN ANIMATION
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.animate(
+            [
+              { opacity: 0, transform: 'translateY(30px)' },
+              { opacity: 1, transform: 'translateY(0px)' }
+            ],
+            {
+              duration: 700,
+              easing: 'ease-out',
+              fill: 'forwards'
+            }
+          );
+        }
+      });
+    });
+
+    document.querySelectorAll('.feature-card, .screenshot-card, .cta-box').forEach((el) => {
+      observer.observe(el);
+    });
+  </script>
+
+</body>
+</html>
